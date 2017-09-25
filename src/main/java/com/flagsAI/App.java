@@ -1,13 +1,12 @@
 package com.flagsAI;
 
 import com.flagsAI.eye.Eye;
-import com.flagsAI.eye.enums.FlagEnum;
-import com.flagsAI.eye.enums.ScreenType;
+import com.flagsAI.enums.FlagEnum;
+import com.flagsAI.enums.ScreenType;
 import net.sourceforge.tess4j.TesseractException;
 
 import java.awt.*;
 import java.io.IOException;
-import java.util.Date;
 
 /**
  * Hello world!

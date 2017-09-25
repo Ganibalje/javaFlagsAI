@@ -1,4 +1,4 @@
-package com.flagsAI.eye.enums;
+package com.flagsAI.enums;
 
 /**
  * Created by ganib on 23.09.2017.
