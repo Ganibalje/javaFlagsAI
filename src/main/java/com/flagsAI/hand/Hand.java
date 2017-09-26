@@ -8,6 +8,6 @@ import java.awt.*;
 public class Hand {
 
     public void click(Rectangle rect){
-        
+
     }
 }
