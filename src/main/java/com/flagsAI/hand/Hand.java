@@ -38,6 +38,7 @@ public class Hand {
         robot.mousePress(InputEvent.BUTTON1_MASK);
         Thread.sleep(100);
         robot.mouseRelease(InputEvent.BUTTON1_MASK);
+        Thread.sleep(1500);
     }
 
     private Point getRectangleMiddle(Rectangle rectangle){

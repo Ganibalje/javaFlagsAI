@@ -1,6 +1,7 @@
 package com.flagsAI.brain;
 
 import com.flagsAI.enums.FlagEnum;
+import com.flagsAI.enums.ImageEnum;
 import com.flagsAI.enums.ImageRatioToWindow;
 import com.flagsAI.enums.ScreenType;
 import com.flagsAI.eye.Eye;
@@ -15,11 +16,23 @@ import java.io.IOException;
 import java.util.Date;
 
 public class Brain {
+    private static Brain instance;
     private Eye eye = Eye.getInstance();
-    private Hand hand;
+    private Hand hand  = Hand.getInstance(eye.getWindow());
     private String lastMessage = "";
 
-    public void doShit() throws IOException, TesseractException {
+    private Brain() throws AWTException {
+
+    }
+
+    public static Brain getInstance() throws AWTException {
+        if(instance == null){
+            instance = new Brain();
+        }
+        return instance;
+    }
+
+    public void doShit() throws IOException, TesseractException, InterruptedException {
         String lastCountryName = "";
 
         while (true) {
@@ -28,6 +41,8 @@ public class Brain {
                 switch (screenType) {
                     case MENU: {
                         //click to multiplayer start
+                        Rectangle startRect = eye.findImageOnScreen(ImageEnum.STARTGAME, ImageEnum.STARTGAME.getImageRatioToWindow());
+                        hand.click(startRect);
                         printMessage("Menu");
                         break;
                     }
@@ -39,22 +54,37 @@ public class Brain {
                     case LOSE_SCREEN:{} //go down
                     case WIN_SCREEN:{
                         //click to restart
+                        Rectangle rect = eye.findImageOnScreen(ImageEnum.GOBACK, ImageEnum.GOBACK.getImageRatioToWindow());
+                        hand.click(rect);
                         printMessage("Click to restart");
                         break;
                     }
+                    case ADS:{
+                        Thread.sleep(5000);
+                        Rectangle rect = eye.findImageOnScreen(ImageEnum.GOBACK, ImageEnum.GOBACK.getImageRatioToWindow());
+                        hand.click(rect);
+                    }
                     case GAME: {
+                        Thread.sleep(1000);
                         BufferedImage screenshot = eye.getScreenshot();
                         String countryName = eye.recognizeCountryName(screenshot);
                         if(!lastCountryName.equals(countryName)) {
-                            FlagEnum flagByCountryName = eye.getFlagByCountryName(countryName);
-                            Rectangle countryBounds = eye.findImageOnScreen(flagByCountryName, ImageRatioToWindow.FLAG);
-                            lastCountryName = countryName;
-                            if(countryBounds == null){
-//                                hand.click(countryBounds);
-                                ImageIO.write(screenshot, "png", new File("D://cant_find_images/" + countryName + new Date().getTime()));
+                            if(FlagEnum.contains(countryName)) {
+                                FlagEnum flagByCountryName = eye.getFlagByCountryName(countryName);
+                                Rectangle countryBounds = eye.findImageOnScreen(flagByCountryName, ImageRatioToWindow.FLAG);
+                                lastCountryName = countryName;
+                                if (countryBounds == null) {
+                                    ImageIO.write(screenshot, "png", new File("D://cant_find_images/" + countryName + new Date().getTime() + ".png"));
+                                    System.out.println("Flag of " + countryName + " cant be found");
+                                } else {
+                                    hand.click(countryBounds);
+                                    printMessage("Flag of county " + countryName + " can be founded at\n" + countryBounds + "\n");
+                                }
                             } else {
-                                printMessage("Flag of county " + countryName + " can be founded at\n" + countryBounds);
+                                System.out.println("Хуйня какая-то, а не страна " + countryName);
                             }
+                        } else {
+                            printMessage("Waiting for player");
                         }
                         break;
                     }

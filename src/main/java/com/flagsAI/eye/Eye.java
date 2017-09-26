@@ -157,11 +157,11 @@ public class Eye {
                 return ScreenType.getScreenTypeByImage(imageEnum);
             }
         }
-        return null;
+        return ScreenType.ADS;
     }
 
     public String recognizeCountryName(BufferedImage image) throws TesseractException {
-        return this.ocr.doOCR(ImageUtils.resizeImageForTextRecognition(image)).replace("\n", "").replace(" ", "");
+        return this.ocr.doOCR(ImageUtils.resizeImageForTextRecognition(image)).replace("\n", "").replace(" ", "").replace("1", "T").replaceAll("-", "");
     }
 
     public FlagEnum getFlagByCountryName(String countryName){
@@ -188,7 +188,10 @@ public class Eye {
         Imgproc.matchTemplate(img, templ, result, TEMPLATE_DETECTION_FUNCTION);
         //Core.normalize(result, result, 0, 1, Core.NORM_MINMAX, -1, new Mat());
         Core.MinMaxLocResult mmr = Core.minMaxLoc(result);
-        if(mmr.maxVal > 0.9) {
+        if(image.getClass() == FlagEnum.class){
+            System.out.println("For flag " + image + " best ratio is " + mmr.maxVal);
+        }
+        if(mmr.maxVal > 0.6) {
             Point matchLoc;
             if (TEMPLATE_DETECTION_FUNCTION == Imgproc.TM_SQDIFF || TEMPLATE_DETECTION_FUNCTION == Imgproc.TM_SQDIFF_NORMED) {
                 matchLoc = mmr.minLoc;

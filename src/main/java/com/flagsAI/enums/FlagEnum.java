@@ -203,5 +203,15 @@ public enum FlagEnum  implements IEnum{
     YEMEN,
     SOUTHAFRICA,
     ZAMBIA,
-    ZIMBABWE;
+    ZIMBABWE,
+    SAINTVINCENTANDTHEGRENADINES;
+
+    public static boolean contains(String str){
+        for (FlagEnum flagEnum : values()) {
+            if(flagEnum.toString().equals(str.toUpperCase())){
+                return true;
+            }
+        }
+        return false;
+    }
 }
