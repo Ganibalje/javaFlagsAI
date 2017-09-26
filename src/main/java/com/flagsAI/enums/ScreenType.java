@@ -14,7 +14,7 @@ public enum ScreenType {
 
 
 
-    public static ScreenType getScreenTypeByImage(ImageEnum image){
+    public static ScreenType   getScreenTypeByImage(ImageEnum image){
         switch (image){
             case MAINMENUFLAGS:
                 return MENU;

@@ -26,7 +26,6 @@ public class Eye {
     private static final String WINDOW_NAME = "BlueStacks";
     private static final String TESSDATAFOLDER = "C:\\Program Files (x86)\\Tesseract-OCR";
     private static final int TEMPLATE_DETECTION_FUNCTION = Imgproc.TM_CCOEFF_NORMED;
-    private static final double[] SIZE_SCALE = ImageUtils.generateSizeScaleArray(0.2, 1.51, 0.01);
 
     private static Eye instance;
     private static ITesseract ocr = new Tesseract();
@@ -182,7 +181,7 @@ public class Eye {
 
         Mat img = ImageUtils.bufferedImageToMat(getScreenshot());
 //        Mat templ = Highgui.imread(flags.get(image), Highgui.CV_LOAD_IMAGE_GRAYSCALE);
-        Mat templ =  ImageUtils.bufferedImageToMat(ImageUtils.resizeImageAccordingToWindow(ImageIO.read(new File(flags.get(image))), window,ratio));
+        Mat templ = ImageUtils.bufferedImageToMat(ImageUtils.resizeImageAccordingToWindow(ImageIO.read(new File(image.getClass() == ImageEnum.class ? images.get(image) : flags.get(image))), window,ratio));
         int result_cols = img.cols() - templ.cols() + 1;
         int result_rows = img.rows() - templ.rows() + 1;
         Mat result = new Mat(result_rows, result_cols, CvType.CV_32FC1);
