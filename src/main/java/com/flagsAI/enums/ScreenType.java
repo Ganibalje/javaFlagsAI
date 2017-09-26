@@ -18,11 +18,11 @@ public enum ScreenType {
         switch (image){
             case MAINMENUFLAGS:
                 return MENU;
-            case MULTIPLAYERSEARCHING:
+            case MULTIPLAYERSEARCHINGFLAG:
                 return GAME_SEARCHING;
-            case MULTIPLAYERSEARCHING2:
+            case MULTIPLAYERSEARCHINGFLAG2:
                 return GAME_SEARCHING;
-            case MULTIPLAYEERGAME:
+            case MULTIPLAYERGAME:
                 return GAME;
             case WIN:
                 return WIN_SCREEN;

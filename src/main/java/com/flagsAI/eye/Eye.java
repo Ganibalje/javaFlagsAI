@@ -152,9 +152,9 @@ public class Eye {
 //        return null;
 //    }
 
-    public ScreenType recognizeScreenType(){
+    public ScreenType recognizeScreenType() throws IOException {
         for (ImageEnum imageEnum : ImageEnum.values()) {
-            if(findImageOnScreen(imageEnum) != null){
+            if(findImageOnScreen(imageEnum, imageEnum.getImageRatioToWindow()) != null){
                 return ScreenType.getScreenTypeByImage(imageEnum);
             }
         }

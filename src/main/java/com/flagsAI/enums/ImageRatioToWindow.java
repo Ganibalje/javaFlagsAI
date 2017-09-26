@@ -8,7 +8,7 @@ public enum ImageRatioToWindow {
     MULTIPLAYERSEARCHING(new double[]{72/543, 72/1036}),
     MULTIPLAYERSEARCHING2(new double[]{72/543, 72/1036}),
     MAINMENUFLAGS(new double[]{252/543, 65/1036}),
-    MULTIPLAYEERGAME(new double[]{252, 543, 35/1036}),
+    MULTIPLAYERGAME(new double[]{252, 543, 35/1036}),
     LOSE(new double[]{204/543, 160/1036}),
     LOSEBUTTON(new double[]{74/543, 72/1036}),
     WIN(new double[]{302/543, 164/1036}),
