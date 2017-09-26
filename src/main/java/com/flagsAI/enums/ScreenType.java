@@ -9,20 +9,27 @@ public enum ScreenType {
     ADS,
     GAME_SEARCHING,
     WIN_SCREEN,
+    LOSE_SCREEN,
     DRAW_SCREEN;
 
 
 
     public static ScreenType getScreenTypeByImage(ImageEnum image){
         switch (image){
-            case MULTYPLAYERBUTTON:
+            case MAINMENUFLAGS:
                 return MENU;
-            case MULTIPLAYERSEARCHINGFLAGS:
+            case MULTIPLAYERSEARCHING:
                 return GAME_SEARCHING;
-            case MULTIPLAYERSEARCHINGFLAGS2:
+            case MULTIPLAYERSEARCHING2:
                 return GAME_SEARCHING;
-            case NICKNAME:
+            case MULTIPLAYEERGAME:
                 return GAME;
+            case WIN:
+                return WIN_SCREEN;
+            case LOSE:
+                return LOSE_SCREEN;
+            case DRAW:
+                return DRAW_SCREEN;
             default:
                 return ADS;
         }

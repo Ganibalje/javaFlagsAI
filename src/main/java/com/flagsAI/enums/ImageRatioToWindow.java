@@ -12,7 +12,8 @@ public enum ImageRatioToWindow {
     LOSE(new double[]{204/543, 160/1036}),
     LOSEBUTTON(new double[]{74/543, 72/1036}),
     WIN(new double[]{302/543, 164/1036}),
-    WINBUTTON(new double[]{75/543, 69/1036});
+    WINBUTTON(new double[]{75/543, 69/1036}),
+    DRAW(new double[]{234/543, 195/1036});
 
     private double[] ratio;
 
