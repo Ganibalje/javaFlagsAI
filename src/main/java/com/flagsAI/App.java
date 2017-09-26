@@ -1,5 +1,6 @@
 package com.flagsAI;
 
+import com.flagsAI.enums.ImageRatioToWindow;
 import com.flagsAI.eye.Eye;
 import com.flagsAI.enums.FlagEnum;
 import com.flagsAI.enums.ScreenType;
@@ -33,7 +34,7 @@ public class App
                         String s = eye.recognizeCountryName(eye.getScreenshot());
                         System.out.println("Flag of county " + s + " can be founded at");
                         FlagEnum flagByCountryName = eye.getFlagByCountryName(s);
-                        Rectangle countryBounds = eye.findImageOnScreen(flagByCountryName);
+                        Rectangle countryBounds = eye.findImageOnScreen(flagByCountryName, ImageRatioToWindow.FLAG);
                         System.out.println(countryBounds);
                     }
                 }
