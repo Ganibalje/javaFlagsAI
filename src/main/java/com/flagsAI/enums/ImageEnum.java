@@ -12,7 +12,8 @@ public enum ImageEnum implements IEnum{
     LOSEBUTTON(ImageRatioToWindow.LOSEBUTTON),
     WIN(ImageRatioToWindow.WIN),
     WINBUTTON(ImageRatioToWindow.WINBUTTON),
-    DRAW(ImageRatioToWindow.DRAW);
+    DRAW(ImageRatioToWindow.DRAW),
+    STARTGAME(ImageRatioToWindow.STARTGAME);
 
     private ImageRatioToWindow imageRatioToWindow;
 
