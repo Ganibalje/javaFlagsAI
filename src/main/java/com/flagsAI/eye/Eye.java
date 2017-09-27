@@ -65,92 +65,6 @@ public class Eye {
         return GDI32Util.getScreenshot(this.windowHandler);
     }
 
-//    public Rectangle findImageOnScreen(IEnum image){
-////        System.out.println("trying find " + image);
-//
-//        BufferedImage screenshot = getScreenshot();
-//        Mat objectImage;
-//        if(image.getClass() == ImageEnum.class)
-//            objectImage = Highgui.imread(images.get(image), Highgui.CV_LOAD_IMAGE_GRAYSCALE);
-//        else
-//            objectImage = Highgui.imread(flags.get(image), Highgui.CV_LOAD_IMAGE_GRAYSCALE);
-//        Mat sceneImage = ImageUtils.bufferedImageToMat(screenshot);
-//
-//        MatOfKeyPoint objectKeyPoints = new MatOfKeyPoint();
-//        FeatureDetector featureDetector = FeatureDetector.create(FeatureDetector.SURF);
-//        featureDetector.detect(objectImage, objectKeyPoints);
-//
-//        MatOfKeyPoint objectDescriptors = new MatOfKeyPoint();
-//        DescriptorExtractor descriptorExtractor = DescriptorExtractor.create(DescriptorExtractor.SURF);
-//        descriptorExtractor.compute(objectImage, objectKeyPoints, objectDescriptors);
-//
-//
-//        MatOfKeyPoint sceneKeyPoints = new MatOfKeyPoint();
-//        MatOfKeyPoint sceneDescriptors = new MatOfKeyPoint();
-//        featureDetector.detect(sceneImage, sceneKeyPoints);
-//        descriptorExtractor.compute(sceneImage, sceneKeyPoints, sceneDescriptors);
-//
-//        LinkedList<MatOfDMatch> matches = new LinkedList<MatOfDMatch>();
-//        DescriptorMatcher descriptorMatcher = DescriptorMatcher.create(DescriptorMatcher.FLANNBASED);
-//        descriptorMatcher.knnMatch(objectDescriptors, sceneDescriptors, matches, 2);
-//
-//        LinkedList<DMatch> goodMatchesList = new LinkedList<DMatch>();
-//
-//        float nndrRatio = 0.7f;
-//
-//        for (int i = 0; i < matches.size(); i++) {
-//            MatOfDMatch matofDMatch = matches.get(i);
-//            DMatch[] dmatcharray = matofDMatch.toArray();
-//            DMatch m1 = dmatcharray[0];
-//            DMatch m2 = dmatcharray[1];
-//
-//            if (m1.distance <= m2.distance * nndrRatio) {
-//                goodMatchesList.addLast(m1);
-//
-//            }
-//        }
-//
-//        if (goodMatchesList.size() >= 7) {
-//
-//            java.util.List<KeyPoint> objKeypointlist = objectKeyPoints.toList();
-//            java.util.List<KeyPoint> scnKeypointlist = sceneKeyPoints.toList();
-//
-//            LinkedList<org.opencv.core.Point> objectPoints = new LinkedList<>();
-//            LinkedList<org.opencv.core.Point> scenePoints = new LinkedList<>();
-//
-//            for (int i = 0; i < goodMatchesList.size(); i++) {
-//                objectPoints.addLast(objKeypointlist.get(goodMatchesList.get(i).queryIdx).pt);
-//                scenePoints.addLast(scnKeypointlist.get(goodMatchesList.get(i).trainIdx).pt);
-//            }
-//
-//            MatOfPoint2f objMatOfPoint2f = new MatOfPoint2f();
-//            objMatOfPoint2f.fromList(objectPoints);
-//            MatOfPoint2f scnMatOfPoint2f = new MatOfPoint2f();
-//            scnMatOfPoint2f.fromList(scenePoints);
-//
-//            Mat homography = Calib3d.findHomography(objMatOfPoint2f, scnMatOfPoint2f, Calib3d.RANSAC, 3);
-//
-//            Mat obj_corners = new Mat(4, 1, CvType.CV_32FC2);
-//            Mat scene_corners = new Mat(4, 1, CvType.CV_32FC2);
-//
-//            obj_corners.put(0, 0, new double[]{0, 0});
-//            obj_corners.put(1, 0, new double[]{objectImage.cols(), 0});
-//            obj_corners.put(2, 0, new double[]{objectImage.cols(), objectImage.rows()});
-//            obj_corners.put(3, 0, new double[]{0, objectImage.rows()});
-//
-//            Core.perspectiveTransform(obj_corners, scene_corners, homography);
-//
-//            double[] ltPoint = scene_corners.get(0, 0);
-//            double[] rbPoint = scene_corners.get(2, 0);
-//            Rectangle result = new Rectangle(new java.awt.Point((int)ltPoint[0], (int)ltPoint[1]));
-//            result.add(new java.awt.Point((int)rbPoint[0], (int)rbPoint[1]));
-//            return result;
-//        }
-//
-//
-//        return null;
-//    }
-
     public ScreenType recognizeScreenType() throws IOException {
         for (ImageEnum imageEnum : ImageEnum.values()) {
             if(findImageOnScreen(imageEnum, imageEnum.getImageRatioToWindow()) != null){
@@ -180,18 +94,16 @@ public class Eye {
     public Rectangle findImageOnScreen(IEnum image, ImageRatioToWindow ratio) throws IOException {
 
         Mat img = ImageUtils.bufferedImageToMat(getScreenshot());
-//        Mat templ = Highgui.imread(flags.get(image), Highgui.CV_LOAD_IMAGE_GRAYSCALE);
         Mat templ = ImageUtils.bufferedImageToMat(ImageUtils.resizeImageAccordingToWindow(ImageIO.read(new File(image.getClass() == ImageEnum.class ? images.get(image) : flags.get(image))), window,ratio));
         int result_cols = img.cols() - templ.cols() + 1;
         int result_rows = img.rows() - templ.rows() + 1;
         Mat result = new Mat(result_rows, result_cols, CvType.CV_32FC1);
         Imgproc.matchTemplate(img, templ, result, TEMPLATE_DETECTION_FUNCTION);
-        //Core.normalize(result, result, 0, 1, Core.NORM_MINMAX, -1, new Mat());
         Core.MinMaxLocResult mmr = Core.minMaxLoc(result);
         if(image.getClass() == FlagEnum.class){
             System.out.println("For flag " + image + " best ratio is " + mmr.maxVal);
         }
-        if(mmr.maxVal > 0.6) {
+        if(mmr.maxVal > 0.55) {
             Point matchLoc;
             if (TEMPLATE_DETECTION_FUNCTION == Imgproc.TM_SQDIFF || TEMPLATE_DETECTION_FUNCTION == Imgproc.TM_SQDIFF_NORMED) {
                 matchLoc = mmr.minLoc;
@@ -200,7 +112,6 @@ public class Eye {
             }
             Rectangle rectResult = new Rectangle(new java.awt.Point((int) matchLoc.x, (int) matchLoc.y));
             rectResult.add(new java.awt.Point((int) (matchLoc.x + templ.cols()), (int) (matchLoc.y + templ.rows())));
-
             return rectResult;
         }
         else

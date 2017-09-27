@@ -65,7 +65,7 @@ public class Brain {
                         hand.click(rect);
                     }
                     case GAME: {
-                        Thread.sleep(1000);
+                        Thread.sleep(1500);
                         BufferedImage screenshot = eye.getScreenshot();
                         String countryName = eye.recognizeCountryName(screenshot);
                         if(!lastCountryName.equals(countryName)) {
@@ -74,14 +74,14 @@ public class Brain {
                                 Rectangle countryBounds = eye.findImageOnScreen(flagByCountryName, ImageRatioToWindow.FLAG);
                                 lastCountryName = countryName;
                                 if (countryBounds == null) {
-                                    ImageIO.write(screenshot, "png", new File("D://cant_find_images/" + countryName + new Date().getTime() + ".png"));
+                                    ImageIO.write(screenshot, "png", new File("C://cant_find_images/" + countryName + new Date().toString() + ".png"));
                                     System.out.println("Flag of " + countryName + " cant be found");
                                 } else {
                                     hand.click(countryBounds);
                                     printMessage("Flag of county " + countryName + " can be founded at\n" + countryBounds + "\n");
                                 }
                             } else {
-                                System.out.println("Хуйня какая-то, а не страна " + countryName);
+                                System.out.println("Can't recognize country with name " + countryName);
                             }
                         } else {
                             printMessage("Waiting for player");
